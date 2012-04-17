@@ -1,0 +1,130 @@
+body {	
+	padding: 0px; 
+	margin: 0px;  
+	font-family: Verdana, Geneva, sans-serif; 
+	margin-left:auto; 
+	margin-right: auto;
+	}
+#header{
+	border: solid 1px #226180; 
+	background-color: #226180; 
+	color: white;
+	}
+#main{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center; 
+	}
+#footer{
+	margin-left: auto;
+	margin-right: auto; 
+	text-align: center;
+	}
+fieldset{
+	margin-left: 250px; 
+	margin-right: 250px; 
+	margin-top: 100px;
+	text-align: center;
+	}
+legend{
+	text-align: left;
+	}
+.leftCols{
+	text-align: right;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	}
+#submit, table{
+	margin-left: auto; 
+	margin-right: auto;
+	}
+.warning{
+	color: blue;
+	font-style: italic; 
+	font-size: 1em;
+	text-align: center;
+	}
+#error{
+		color: red;
+		font-weight: bold;
+		font-size: 1em;
+		text-align: center;
+		visibility: hidden;
+	}
+.rightCols{
+	padding-bottom: 5px;
+	}
+table.pointmeter {
+	margin-top: 80px;
+	border-width: 1px;
+	border-spacing: 2px;
+	border-style: double;
+	border-color: gray;
+	border-collapse: separate;
+	background-color: white;
+	}
+table.pointmeter td {
+	border-width: 1px;
+	padding: 1px;
+	border-style: inset;
+	border-color: gray;
+	background-color: #226180;
+	width: 170px;
+	color: white;
+	}
+table.pointmeter th {
+	border-width: 1px;
+	padding: 1px;
+	border-style: inset;
+	border-color: gray;
+	background-color: #226180;
+	width: 150px;
+	color: white
+	}
+table.questionnaire {
+		margin-top: 25px;  
+        border-width: 1px;
+        border-spacing: 2px;
+        border-style: double;
+        border-color: gray;
+        border-collapse: separate;
+        background-color: white;
+	}
+table.questionnaire td {
+	border-width: 1px;
+        padding: 5px;
+        border-style: inset; 
+        border-color: gray;
+        background-color: #226180;
+        color: white;
+	}
+table.questionnaire th {
+        border-width: 1px;
+        padding: 1px;
+        border-style: inset; 
+        border-color: gray;  
+        background-color: #226180;
+        color: white
+        }
+table.questionnaire .leftCols {
+	width: 900px;
+	text-align: left;
+	}
+#submit {
+	margin-top: 15px;
+	}
+a	{
+	text-decoration: none;
+	}
+textarea{
+	width: 400px;
+	height: 100px;
+	font-size: 1.2em;
+	}
+span{
+	vertical-align: top;
+	margin-right: 50px;
+	}
+#course, #prof{
+	width: 200px;
+	}
