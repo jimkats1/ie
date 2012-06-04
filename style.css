@@ -65,7 +65,7 @@ table.pointmeter {
 	}
 table.pointmeter td {
 	border-width: 1px;
-	padding: 1px;
+	padding: 5px;
 	border-style: inset;
 	border-color: gray;
 	background-color: #226180;
@@ -127,4 +127,11 @@ span{
 	}
 #course, #prof{
 	width: 200px;
+	}
+img:hover{
+	opacity: 0.5;
+	filter:alpha(opacity=40); /* For IE8 or Earlier */ 
+	}
+h2 {
+	margin-bottom: -30px;
 	}

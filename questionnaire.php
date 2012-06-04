@@ -16,6 +16,8 @@
        		$extra = 'admin.php';
        		header("Location: http://$host$uri/$extra");
 	}
+	$_SESSION['qform']=5;
+	$_SESSION['qresult']=0;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -53,7 +55,8 @@
   			<h1>ΕΣΩΤΕΡΙΚΗ ΑΞΙΟΛΟΓΗΣΗ ΤΕΣΥΔ</h1>
   		</div>
   		<div id="main">
-			<a href="logout.php"><input type="button" value="Έξοδος" /></a><br/>
+			<a href="logout.php"><input type="button" id="submit" value="Έξοδος" /></a><br/>
+			<form name="questionnaire" action='act.php' method='post'>
 			<table class="pointmeter">
 				<tr>
 					<td colspan='2'>Επέλεξε το εξάμηνο του μαθήματος: </td>
@@ -85,7 +88,6 @@
 					</td>
 				</tr>
 			</table>
-			<form action='act.php' method='post'>
   			<table class="pointmeter">
 				<tr>
 					<th colspan='5'>Βαθμολογική Κλίμακα</th>
@@ -117,20 +119,20 @@
 					$result = mysql_query("SELECT * FROM question");
 					while($row = mysql_fetch_array($result))
   					{
-                                                if($row['multiple_choice']==1)
-                                                {
+						if($row['multiple_choice']==1)
+                        {
 							echo "<tr><td class='leftCols'>";
 							echo $row['name'];
-                                                        echo "</td><td>";
-                                                        echo "<select name='points'><option value='empty'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select>";
-                                                }
-                                                else
-                                                {
+                            echo "</td><td>";
+                            echo "<select name='".$row['id']."'><option value='empty'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select>";
+                        }
+                        else
+                        {
 							echo "<tr><td class='leftCols' colspan='2'>";
 							echo "<span>".$row['name']."</span>";
-                                                        echo "<textarea></textarea>";
-                                                }
-						 echo "</td></tr>";
+                            echo "<textarea name='".$row['id']."'></textarea>";
+                        }
+						echo "</td></tr>";
   					}
 				?>
 			</table>

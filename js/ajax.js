@@ -5,12 +5,12 @@ function ajax(ch1, ch2)
 	var xmlhttp;
 	if(ch2=='1')
 	{
-		getter="getCourse";
+		getter="getcourse";
 		param="course";
 	}
 	else if(ch2=='2')
 	{
-		getter="getProf";
+		getter="getprof";
 		param="prof"
 	}
 	else

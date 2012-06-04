@@ -16,6 +16,7 @@
 		$extra = 'questionnaire.php';
                 header("Location: http://$host$uri/$extra");
 	}
+	$self=htmlentities($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -31,12 +32,12 @@
   			<h1>ΕΣΩΤΕΡΙΚΗ ΑΞΙΟΛΟΓΗΣΗ ΤΕΣΥΔ</h1>
   		</div>
   		<div id="main">
-			<h2>THIS IS ADMIN'S AREA!</h2>
-			<div>Πρόγραμμα Σπουδών</div>
-			<div>Καθηγητές</div>
-			<div>Ερωτηματολόγιο</div>
-			<div>Ρυθμίσεις Συστήματος</div>
-			<a href='logout.php'><input type='button' value='Έξοδος' /></a>
+			<h2>Admin's Menu</h2>
+			<table class="pointmeter">
+				<tr><td>Questions<br/><a href="<?php echo $self . "?q=1"; ?>"><img src="images/surveys-icon.png" title="Questions" alt="Questions Icon" /></a></td><td>Prof and Courses<br/><a href="<?php echo $self . "?q=2"; ?>"><img src="images/Courses-icon.png" title="Professors and Courses" alt="Professors and Courses Icon" /></a></td></tr>
+				<tr><td>Results<br/><a href="<?php echo $self . "?q=3"; ?>"><img src="images/folder-documents-icon.png" title="Results" alt="Result Icon" /></a></td><td>System Configuration<br/><a href="<?php echo $self . "?q=4"; ?>"><img src="images/Gear-icon.png" title="System Configuration" alt="Config Icon" /></a></td></tr>
+			</table>
+			<a href="logout.php"><input type="button" id="submit" value="Έξοδος" /></a>
 		</div>
   		<div id="footer">
   			<script type="text/javascript">
