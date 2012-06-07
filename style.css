@@ -113,9 +113,6 @@ table.questionnaire .leftCols {
 #submit {
 	margin-top: 15px;
 	}
-a	{
-	text-decoration: none;
-	}
 textarea{
 	width: 400px;
 	height: 100px;
@@ -135,3 +132,10 @@ img:hover{
 h2 {
 	margin-bottom: -30px;
 	}
+a	{
+	text-decoration: none;
+	color: yellow;
+	}
+a.delete:hover{
+		text-decoration: underline;
+		}

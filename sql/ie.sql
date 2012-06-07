@@ -2,10 +2,10 @@
 -- version 3.4.5
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Apr 24, 2012 at 11:32 AM
--- Server version: 5.5.16
--- PHP Version: 5.3.8
+-- Φιλοξενητής: localhost
+-- Χρόνος δημιουργίας: 07 Ιουν 2012 στις 22:45:22
+-- Έκδοση Διακομιστή: 5.5.16
+-- Έκδοση PHP: 5.3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,24 +17,25 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `ie`
+-- Βάση: `ie`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `course`
+-- Δομή Πίνακα για τον Πίνακα `course`
 --
 
 CREATE TABLE IF NOT EXISTS `course` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `semester` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `semester` (`semester`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Dumping data for table `course`
+-- Άδειασμα δεδομένων του πίνακα `course`
 --
 
 INSERT INTO `course` (`id`, `name`, `semester`) VALUES
@@ -45,18 +46,20 @@ INSERT INTO `course` (`id`, `name`, `semester`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `course_professor`
+-- Δομή Πίνακα για τον Πίνακα `course_professor`
 --
 
 CREATE TABLE IF NOT EXISTS `course_professor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `cid` (`cid`),
+  KEY `pid` (`pid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `course_professor`
+-- Άδειασμα δεδομένων του πίνακα `course_professor`
 --
 
 INSERT INTO `course_professor` (`id`, `cid`, `pid`) VALUES
@@ -68,7 +71,7 @@ INSERT INTO `course_professor` (`id`, `cid`, `pid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `professor`
+-- Δομή Πίνακα για τον Πίνακα `professor`
 --
 
 CREATE TABLE IF NOT EXISTS `professor` (
@@ -79,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `professor` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Dumping data for table `professor`
+-- Άδειασμα δεδομένων του πίνακα `professor`
 --
 
 INSERT INTO `professor` (`id`, `name`, `surname`) VALUES
@@ -90,7 +93,7 @@ INSERT INTO `professor` (`id`, `name`, `surname`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `question`
+-- Δομή Πίνακα για τον Πίνακα `question`
 --
 
 CREATE TABLE IF NOT EXISTS `question` (
@@ -101,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `question` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
 
 --
--- Dumping data for table `question`
+-- Άδειασμα δεδομένων του πίνακα `question`
 --
 
 INSERT INTO `question` (`id`, `name`, `multiple_choice`) VALUES
@@ -146,7 +149,7 @@ INSERT INTO `question` (`id`, `name`, `multiple_choice`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `questionset`
+-- Δομή Πίνακα για τον Πίνακα `questionset`
 --
 
 CREATE TABLE IF NOT EXISTS `questionset` (
@@ -157,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `questionset` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `questionset`
+-- Άδειασμα δεδομένων του πίνακα `questionset`
 --
 
 INSERT INTO `questionset` (`id`, `name`, `date`) VALUES
@@ -166,18 +169,20 @@ INSERT INTO `questionset` (`id`, `name`, `date`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `question_questionset`
+-- Δομή Πίνακα για τον Πίνακα `question_questionset`
 --
 
 CREATE TABLE IF NOT EXISTS `question_questionset` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `qid` int(11) NOT NULL,
   `sid` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `qid` (`qid`),
+  KEY `sid` (`sid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
--- Dumping data for table `question_questionset`
+-- Άδειασμα δεδομένων του πίνακα `question_questionset`
 --
 
 INSERT INTO `question_questionset` (`id`, `qid`, `sid`) VALUES
@@ -221,7 +226,7 @@ INSERT INTO `question_questionset` (`id`, `qid`, `sid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `result`
+-- Δομή Πίνακα για τον Πίνακα `result`
 --
 
 CREATE TABLE IF NOT EXISTS `result` (
@@ -235,29 +240,16 @@ CREATE TABLE IF NOT EXISTS `result` (
   `ans4` int(11) DEFAULT NULL,
   `ans5` int(11) DEFAULT NULL,
   `textans` text,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
-
---
--- Dumping data for table `result`
---
-
-INSERT INTO `result` (`id`, `cid`, `pid`, `qid`, `ans1`, `ans2`, `ans3`, `ans4`, `ans5`, `textans`) VALUES
-(41, 1, 0, 1, NULL, 1, NULL, NULL, NULL, NULL),
-(42, 1, 0, 2, NULL, NULL, 1, NULL, NULL, NULL),
-(43, 1, 0, 1, NULL, 1, NULL, NULL, NULL, NULL),
-(44, 1, 0, 2, NULL, NULL, 1, NULL, NULL, NULL),
-(45, 1, 0, 1, NULL, 1, NULL, NULL, NULL, NULL),
-(46, 1, 0, 2, NULL, NULL, 1, NULL, NULL, NULL),
-(47, 1, 0, 37, NULL, NULL, NULL, NULL, NULL, ''),
-(48, 1, 0, 1, 1, NULL, NULL, NULL, NULL, NULL),
-(49, 1, 0, 37, NULL, NULL, NULL, NULL, NULL, ''),
-(50, 1, 0, 37, NULL, NULL, NULL, NULL, NULL, '');
+  PRIMARY KEY (`id`),
+  KEY `cid` (`cid`),
+  KEY `pid` (`pid`),
+  KEY `qid` (`qid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `semester`
+-- Δομή Πίνακα για τον Πίνακα `semester`
 --
 
 CREATE TABLE IF NOT EXISTS `semester` (
@@ -268,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `semester` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `semester`
+-- Άδειασμα δεδομένων του πίνακα `semester`
 --
 
 INSERT INTO `semester` (`id`, `sem_num`, `sem_name`) VALUES
@@ -278,7 +270,7 @@ INSERT INTO `semester` (`id`, `sem_num`, `sem_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `student`
+-- Δομή Πίνακα για τον Πίνακα `student`
 --
 
 CREATE TABLE IF NOT EXISTS `student` (
@@ -287,6 +279,38 @@ CREATE TABLE IF NOT EXISTS `student` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Περιορισμοί για άχρηστους πίνακες
+--
+
+--
+-- Περιορισμοί για πίνακα `course`
+--
+ALTER TABLE `course`
+  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`semester`) REFERENCES `semester` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Περιορισμοί για πίνακα `course_professor`
+--
+ALTER TABLE `course_professor`
+  ADD CONSTRAINT `course_professor_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `professor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `course_professor_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Περιορισμοί για πίνακα `question_questionset`
+--
+ALTER TABLE `question_questionset`
+  ADD CONSTRAINT `question_questionset_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `questionset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `question_questionset_ibfk_1` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Περιορισμοί για πίνακα `result`
+--
+ALTER TABLE `result`
+  ADD CONSTRAINT `result_ibfk_3` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `result_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `result_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `professor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

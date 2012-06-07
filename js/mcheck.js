@@ -18,3 +18,15 @@ function check()
 	}
 	return true;
 }
+
+function insertQCheck()
+{
+	var new_q = document.getElementById('new_q').value;
+	var multiple_choice = document.getElementById('multiple_choice').value;
+	if(new_q == null || new_q == '' || multiple_choice == null || multiple_choice == '')
+	{
+		alert("Για να εισάγετε ερώτηση πρέπει να συμπληρώσετε όλα τα πεδία!");
+		return false;
+	}
+	return true;
+}
