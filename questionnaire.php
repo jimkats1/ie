@@ -2,19 +2,26 @@
 	session_start();
 	require_once(".inc/init.php");
 	require_once(".inc/config.php");
-	if(!isset($_SESSION['username']))
+	$query = mysql_query("SELECT evaluation_period FROM config WHERE id='1'");
+	$row = mysql_fetch_assoc($query);
+	if(!isset($_SESSION['username']) || $row['evaluation_period'] == 0)
 	{
 		session_destroy();
 		$host  = $_SERVER['HTTP_HOST'];
-       		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-       		header("Location: http://$host$uri/");
+       	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+       	$extra = 'index.php?period=out';
+       	if($row['evaluation_period'] == 0) {header("Location: http://$host$uri/$extra");}
+       	else
+       	{
+			header("Location: http://$host$uri/");
+		}
 	}
 	elseif($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
 	{
 		$host  = $_SERVER['HTTP_HOST'];
-       		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-       		$extra = 'admin.php';
-       		header("Location: http://$host$uri/$extra");
+       	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+       	$extra = 'admin.php';
+       	header("Location: http://$host$uri/$extra");
 	}
 	$_SESSION['qform']=5;
 	$_SESSION['qresult']=0;

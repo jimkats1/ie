@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Φιλοξενητής: localhost
--- Χρόνος δημιουργίας: 07 Ιουν 2012 στις 22:45:22
+-- Χρόνος δημιουργίας: 11 Ιουν 2012 στις 00:09:26
 -- Έκδοση Διακομιστή: 5.5.16
 -- Έκδοση PHP: 5.3.8
 
@@ -19,6 +19,27 @@ SET time_zone = "+00:00";
 --
 -- Βάση: `ie`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Δομή Πίνακα για τον Πίνακα `config`
+--
+
+CREATE TABLE IF NOT EXISTS `config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `warning_message` text,
+  `intro_message` text,
+  `evaluation_period` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Άδειασμα δεδομένων του πίνακα `config`
+--
+
+INSERT INTO `config` (`id`, `warning_message`, `intro_message`, `evaluation_period`) VALUES
+(1, 'Παρακαλώ εισάγετε το όνομα χρήστη και κωδικό που έχετε στο studweb', 'No Message of the Day!', 1);
 
 -- --------------------------------------------------------
 
@@ -294,23 +315,23 @@ ALTER TABLE `course`
 -- Περιορισμοί για πίνακα `course_professor`
 --
 ALTER TABLE `course_professor`
-  ADD CONSTRAINT `course_professor_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `professor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `course_professor_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `course_professor_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `course_professor_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `professor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Περιορισμοί για πίνακα `question_questionset`
 --
 ALTER TABLE `question_questionset`
-  ADD CONSTRAINT `question_questionset_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `questionset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `question_questionset_ibfk_1` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `question_questionset_ibfk_1` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `question_questionset_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `questionset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Περιορισμοί για πίνακα `result`
 --
 ALTER TABLE `result`
-  ADD CONSTRAINT `result_ibfk_3` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `result_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `result_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `professor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `result_ibfk_2` FOREIGN KEY (`pid`) REFERENCES `professor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `result_ibfk_3` FOREIGN KEY (`qid`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

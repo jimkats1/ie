@@ -1,5 +1,6 @@
 <?php
  session_start();
+ require_once(".inc/init.php");
  require_once(".inc/config.php");
  error_reporting(E_ALL & ~E_NOTICE);
 if($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
@@ -49,11 +50,18 @@ if($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
   				</form> 
   			</fieldset>
   		</div>
-        <p id='error'>Συμπληρώστε τα δυο παραπάνω πεδία για είσοδο!</p>
-        <p class='warning'>Παρακαλώ εισάγετε το όνομα χρήστη και κωδικό που έχετε στο studweb</p>
-        <div id='news'>
-        	
-        </div>
+  		<?php
+			$sql = "SELECT * FROM config WHERE id='1'";
+			$result = mysql_query($sql);
+			$row = mysql_fetch_assoc($result);
+			if(isset($_GET['period']))
+			{
+				echo "<script type='text/javascript'>alert('ΔΕΝ ΕΙΝΑΙ ΠΕΡΙΟΔΟΣ ΑΞΙΟΛΟΓΗΣΗΣ!')</script>";
+			}
+		?>
+        <p class='error'>Συμπληρώστε τα δυο παραπάνω πεδία για είσοδο!</p>
+        <p class='warning'><?php echo $row['warning_message']; ?></p>
+        <p class='intro'><?php echo $row['intro_message']; ?></p>
   		<div id="footer">
 			<script type="text/javascript">
 				footer();

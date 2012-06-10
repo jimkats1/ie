@@ -44,7 +44,7 @@ legend{
 	font-size: 1em;
 	text-align: center;
 	}
-#error{
+.error{
 		color: red;
 		font-weight: bold;
 		font-size: 1em;
@@ -137,5 +137,11 @@ a	{
 	color: yellow;
 	}
 a.delete:hover{
+		text-decoration: underline;
+		}
+.intro {
+		font-size: 1em;
+		text-align: center;
+		font-style: italic;
 		text-decoration: underline;
 		}

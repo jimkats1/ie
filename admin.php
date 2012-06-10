@@ -33,7 +33,7 @@
   		</div>
   		<div id="main">
 			<?php
-				if(isset($_GET['q']) && $_GET['q']==1):
+				if(isset($_GET['q']) && $_GET['q'] == 1):
 					if(isset($_GET['delete']))
 					{
 						$sql = "DELETE FROM question WHERE id='{$_GET['delete']}'";
@@ -80,6 +80,44 @@
 					}
 				?>
 			</table>
+			<?php
+				elseif(isset($_GET['q']) && $_GET['q'] == 4):
+					if(isset($_POST['submit']))
+					{
+						$sql = "UPDATE config SET warning_message='{$_POST['warning_message']}',intro_message='{$_POST['intro_message']}',evaluation_period='{$_POST['eval_period']}' WHERE id='1'";
+						if(mysql_query($sql))
+						{
+							echo "<script type='text/javascript'>alert('Οι αλλαγές αποθηκεύτηκαν!')</script>";
+						}
+						else
+						{
+							echo "<script type='text/javascript'>alert('Σφάλμα!')</script>";
+						}
+					}
+					$sql = "SELECT * FROM config WHERE id='1'";
+					$result = mysql_query($sql);
+					$row = mysql_fetch_assoc($result);
+			?>
+				<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
+				<form name="system_config" action="admin.php?q=4&submit=1" method="post">
+					<table class='pointmeter'>
+						<tr><td><label for='warning_message'>Warning Message: </label></td><td><textarea name='warning_message'><?php echo $row['warning_message']; ?></textarea></td></tr>
+						<tr><td><label for='intro_message'>Intro Message: </label></td><td><textarea name='intro_message'><?php echo $row['intro_message']; ?></textarea></td></tr>
+						<tr><td><label for='evaluation_period'>Περίοδος Αξιολόγησης: </label></td>
+							<?php
+								if($row['evaluation_period'] == 1)
+								{
+									echo "<td>Ναι<input type='radio' name='eval_period' value='1' checked='checked' /> Όχι<input type='radio' name='eval_period' value='0' /></td></tr>";
+									
+								}
+								else
+								{
+									echo "<td>Ναι<input type='radio' name='eval_period' value='1' /> Όχι<input type='radio' name='eval_period' value='0' checked='checked' /></td></tr>";
+								}
+							?>	
+						<tr><td colspan='2'><input type='submit' name='submit' value='Αποθήκευση' /></td></tr>
+					</table>
+				</form>
 			<?php
 				else:
 			?>
