@@ -26,6 +26,23 @@
 		<title>ΕΣΩΤΕΡΙΚΗ ΑΞΙΟΛΟΓΗΣΗ ΤΕΣΥΔ</title>
 		<script type="text/javascript" src="js/mcheck.js"></script>
 		<script type="text/javascript" src="js/footer.js"></script>
+		<script type="text/javascript" src="js/ajax.js"></script>
+		<script type="text/javascript">
+			function conf()
+			{
+				var conf = confirm("Αυτή η ενέργεια είναι μη αναστρέψιμη. Είστε σίγουρος ότι θέλετε να συνεχίσετε?");
+				if(conf === false)
+				{
+					document.getElementById("cleardb").href="admin.php?q=3";
+					return false;
+				}
+				else
+				{
+					document.getElementById("cleardb").href="admin.php?q=3&cleardb=1";
+					return true;
+				}
+			}
+		</script>
 	</head>
 	<body>
 		<div id="header">
@@ -36,23 +53,49 @@
 				if(isset($_GET['q']) && $_GET['q'] == 1):
 					if(isset($_GET['delete']))
 					{
-						$sql = "DELETE FROM question WHERE id='{$_GET['delete']}'";
+						$sql = "DELETE question, result, textresult FROM (question LEFT JOIN result ON question.id=result.qid) LEFT JOIN textresult ON question.id=textresult.qid WHERE question.id='{$_GET['delete']}'";
 						mysql_query($sql);
 					}
 					elseif(isset($_POST['submit']))
 					{
 						$_POST['new_q'] = stripslashes($_POST['new_q']);
-						$_POST['multiple_choice'] = stripslashes($_POST['multiple_choice']);
+						$mc = stripslashes($_POST['multiple_choice']);
 						$_POST['new_q'] = mysql_real_escape_string($_POST['new_q']);
-						$_POST['multiple_choice'] = mysql_real_escape_string($_POST['multiple_choice']);
-						$sql = "INSERT INTO question (name,multiple_choice) VALUES('{$_POST['new_q']}', '{$_POST['multiple_choice']}')";
+						$mc = mysql_real_escape_string($mc);
+						$sql = "INSERT INTO question (name,multiple_choice) VALUES('{$_POST['new_q']}', '{$mc}')";
 						mysql_query($sql);
+						$sql = "SELECT MAX(id) FROM question";
+						$maxId = mysql_query($sql);
+						$maxId = mysql_fetch_assoc($maxId);
+						$sql = "SELECT id FROM course";
+						$courses = mysql_query($sql);
+						while($row = mysql_fetch_assoc($courses))
+						{
+							$sql = "SELECT pid FROM course_professor WHERE cid='{$row['id']}'";
+							$prof = mysql_query($sql);
+							if($mc === 0)
+							{
+								while($row2 = mysql_fetch_assoc($prof))
+								{
+									$sql2 = "INSERT INTO result (cid,pid,qid) VALUES('{$row['id']}', '{$row2['pid']}', '{$maxId['MAX(id)']}')";
+									mysql_query($sql2);
+								}
+							}
+							else
+							{
+								while($row2 = mysql_fetch_assoc($prof))
+								{
+									$sql2 = "INSERT INTO textresult (cid,pid,qid) VALUES('{$row['id']}', '{$row2['pid']}', '{$maxId['MAX(id)']}')";
+									mysql_query($sql2);
+								}
+							}
+						}
 					}
 			?>
 			<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
 			<form action="admin.php?q=1" method="post" onsubmit="return insertQCheck()">
 				<table class="pointmeter">
-					<tr><td>Εισαγωγή Ερώτησης: <input type="text" name="new_q" id="new_q" /></td><td>Πολλαπλής Επιλογής: Ναι<input type="radio" name="multiple_choice" id="multiple_choice" value="1"/> Όχι<input type="radio" name="multiple_choice" id="mulptiple_choice" value="0"/></td><td><input type="submit" name="submit" value="Εισαγωγή" /></td></tr>
+					<tr><td>Εισαγωγή Ερώτησης: <input type="text" name="new_q" id="new_q" /></td><td>Πολλαπλής Επιλογής: Ναι<input type="radio" name="multiple_choice" id="multiple_choice" checked="checked" value="1"/> Όχι<input type="radio" name="multiple_choice" id="mulptiple_choice" value="0"/></td><td><input type="submit" name="submit" value="Εισαγωγή" /></td></tr>
 				</table>
 			</form>	
 			<table class="questionnaire">
@@ -80,6 +123,166 @@
 					}
 				?>
 			</table>
+			<?php
+				elseif(isset($_GET['q']) && $_GET['q'] == 2):
+				if(isset($_GET['course']) && $_GET['course'] == 2)
+				{
+					$sql = "SELECT professor.id AS id, course_professor.id AS courseProf, professor.name, professor.surname, course.name AS course, sem_name FROM (course INNER JOIN semester ON course.semester=semester.id) INNER JOIN (course_professor INNER JOIN professor ON course_professor.pid=professor.id) ON course.id=course_professor.cid WHERE professor.id={$_GET['profId']}";
+					$result = mysql_query($sql);
+					echo "<table class='pointmeter'>";
+					echo "<tr><th> Όνομα </th><th> Επώνυμο </th><th> Μάθημα </th><th> Εξάμηνο </th><th><br/></th></tr>";
+					while($row = mysql_fetch_assoc($result))
+					{
+						echo "<tr>";
+						echo "<td>".$row['name']."</td>";
+						echo "<td>".$row['surname']."</td>";
+						echo "<td>".$row['course']."</td>";
+						echo "<td>".$row['sem_name']."</td>";
+						echo "<td><a class='delete' href='admin.php?q=2&course=2&profId={$row['id']}&courseProf={$row['courseProf']}'>Αφαίρεση Μαθήματος από Καθηγητή</a></td></tr>";
+						echo "</tr>";
+					}
+					echo "</table>";
+				}
+			?>
+				<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
+				<form action="admin.php?q=2" method="post">
+				<table class="pointmeter">
+					<tr>
+						<th colspan='2'>Εισαγωγή Καθηγητή</th>
+					</tr>
+					<tr>
+						<td>Όνομα: </td><td><input type="text" name="profName"/></td>
+					</tr>
+						<td>Επώνυμο: </td><td><input type="text" name="profSurname"/></td>
+					</tr>
+					<tr>
+						<td colspan='2'><input type="submit" name="insertProf" value="Εισαγωγή"/></td>
+					</tr>
+				</table>
+				</form>
+			<?php
+						if(isset($_POST['insertProf']))
+						{
+							$profName = $_POST['profName'];
+							$profSurname = $_POST['profSurname'];
+							$sql = "INSERT INTO professor (name, surname) VALUES('$profName', '$profSurname')";
+							mysql_query($sql); 
+						}
+						$sql = "SELECT professor.id, name, surname, COUNT(cid) FROM professor LEFT JOIN course_professor ON professor.id=course_professor.pid GROUP BY professor.id";
+						$result = mysql_query($sql);
+						echo "<table class='pointmeter'>";
+						echo "<tr><th> Id </th><th> Όνομα </th><th> Επώνυμο </th><th> Πλήθος Μαθημάτων </th><th><br/></th></tr>";
+						while($row = mysql_fetch_assoc($result))
+						{
+							echo "<tr>";
+							echo "<td>".$row['id']."</td>";
+							echo "<td>".$row['name']."</td>";
+							echo "<td>".$row['surname']."</td>";
+							echo "<td><a class='delete' href='admin.php?q=2&course=2&profId={$row['id']}'>".$row['COUNT(cid)']."</a></td>";
+							echo "<td><a class='delete' href='admin.php?q=2&delete={$row['id']}'>Διαγραφή</a></td></tr>";
+							echo "</tr>";
+						}
+						echo "</table>";
+			?>
+			<?php
+				elseif(isset($_GET['q']) && $_GET['q'] == 3):
+			?>
+			<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a><br/><br/><br/>
+			<a href="admin.php?q=3&cleardb=1" id="cleardb"><input type="button" value="Διαγραφή όλων των Αποτελεσμάτων" onclick="conf()"/></a>
+			<form action="admin.php?q=3" method="post">
+			<table class="pointmeter">
+				<tr>
+					<td colspan='2'>Επέλεξε το εξάμηνο του μαθήματος: </td>
+					<td colspan='2'>
+						<select name="semester" id="semester" onchange="semesterSelected()">
+							<option value='-1'></option>
+							<?php
+								$result = mysql_query("SELECT * FROM semester");
+								while($row = mysql_fetch_array($result))
+								{
+									echo "<option value='".$row['sem_num']."'>{$row['sem_name']}</option>";
+								}	
+							?>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td> Επέλεξε Μάθημα: </td>
+					<td>
+						<select name="course" id="course" onchange="courseSelected()">
+							<option value='-1'></option>
+						</select>
+					</td>
+					<td> Επέλεξε Καθηγητή: </td>
+					<td>
+						<select name="prof" id="prof">
+							<option value='-1'></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan='2'>Εμφάνιση ερωτήσεων πολλαπλής επιλογής: </td>
+					<td colspan='2'> Ναι<input type="radio" name="multiple_choice" id="multiple_choice" checked="checked" value="1"/> Όχι<input type="radio" name="multiple_choice" id="mulptiple_choice" value="0"/></td>
+				</tr>
+				<tr>
+					<td colspan='4'><input type="submit" name="submit" value="Εμφάνιση"</td>
+				</tr>
+			</table>
+			</form>
+			<?php
+				if(isset($_GET['cleardb']))
+				{
+					$sql = "UPDATE result SET ans1=0, ans2=0, ans3=0, ans4=0, ans5=0";
+					mysql_query($sql);
+					$sql = "TRUNCATE TABLE textresult";
+					mysql_query($sql);
+				}
+			?>
+			<?php
+				if(isset($_POST['submit']))
+				{
+					if($_POST['multiple_choice']==1)
+					{
+						$sql = "SELECT name, ans1, ans2, ans3, ans4, ans5 FROM question INNER JOIN result ON question.id=result.qid WHERE cid={$_POST['course']} AND pid={$_POST['prof']}";
+						$result = mysql_query($sql);
+						echo "<table class='pointmeter'>";
+						echo "<tr><th>Ερώτηση</th><th>Καθόλου - Απαράδεκτη</th><th>Λίγο - Μη ικανοποιητική</th><th>Μέτρια</th><th>Πολύ - Ικανοποιητική</th><th>Πάρα πολύ - Πολύ Καλή</th></tr>";
+						while($row = mysql_fetch_array($result))
+						{
+							$all = $row['ans1'] + $row['ans2'] + $row['ans3'] + $row['ans4'] + $row['ans5'];
+							$perc['ans1'] = ($row['ans1']/$all)*100;
+							$perc['ans2'] = ($row['ans2']/$all)*100;
+							$perc['ans3'] = ($row['ans3']/$all)*100;
+							$perc['ans4'] = ($row['ans4']/$all)*100;
+							$perc['ans5'] = ($row['ans5']/$all)*100;
+							echo "<tr>";
+							echo "<td>".$row['name']."</td>";
+							echo "<td>".$perc['ans1']."&#37; (".$row['ans1'].")</td>";
+							echo "<td>".$perc['ans2']."&#37; (".$row['ans2'].")</td>";
+							echo "<td>".$perc['ans3']."&#37; (".$row['ans3'].")</td>";
+							echo "<td>".$perc['ans4']."&#37; (".$row['ans4'].")</td>";
+							echo "<td>".$perc['ans5']."&#37; (".$row['ans5'].")</td>";
+							echo "</tr>";
+						}
+						echo "</table>";	
+					}
+					else
+					{
+						$sql = "SELECT name, textans FROM question INNER JOIN textresult ON question.id=textresult.qid WHERE cid={$_POST['course']} AND pid={$_POST['prof']}";
+						$result = mysql_query($sql);
+						echo "<table class='pointmeter'>";
+						echo "<tr><th>Ερώτηση</th><th>Απάντηση</th></tr>";
+						while($row = mysql_fetch_array($result))
+						{
+							echo "<tr>";
+							echo "<td>".$row['name']."</td>";
+							echo "<td>".$row['textans']."</td>";
+							echo "</tr>";
+						}
+						echo "</table>";
+					}
+				}
+			?>
 			<?php
 				elseif(isset($_GET['q']) && $_GET['q'] == 4):
 					if(isset($_POST['submit']))

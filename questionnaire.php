@@ -32,30 +32,10 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<title>ΕΣΩΤΕΡΙΚΗ ΑΞΙΟΛΟΓΗΣΗ ΤΕΣΥΔ</title>
+		<script type="text/javascript" src="js/mcheck.js"></script>
 		<script type="text/javascript" src="js/questionnaire.js"></script>
 		<script type="text/javascript" src="js/footer.js"></script>
 		<script type="text/javascript" src="js/ajax.js"></script>
-		<script type="text/javascript">
-			function semesterSelected()
-			{
-				var semester = document.getElementById('semester').value;
-				document.getElementById('course').innerHTML="<option value='-1'></option>";
-				document.getElementById('prof').innerHTML="<option value='-1'></option>";
-				if(semester!=-1)
-				{
-					ajax(semester, 1);
-				}	
-			}
-			function courseSelected()
-			{
-				var course = document.getElementById('course').value;
-				document.getElementById('prof').innerHTML="<option value='-1'></option>";
-				if(course!=-1)
-				{
-					ajax(course, 2);
-				}	
-			}
-		</script>
 	</head>
 	<body>
 		<div id="header">
@@ -63,7 +43,8 @@
   		</div>
   		<div id="main">
 			<a href="logout.php"><input type="button" id="submit" value="Έξοδος" /></a><br/>
-			<form name="questionnaire" action='act.php' method='post'>
+			<form name="questionnaire" action='act.php' method='post' onsubmit="return formCheck()">
+			<h5>(*)Ολα τα πεδία είναι υποχρεωτικά</h5>	
 			<table class="pointmeter">
 				<tr>
 					<td colspan='2'>Επέλεξε το εξάμηνο του μαθήματος: </td>
@@ -131,13 +112,13 @@
 							echo "<tr><td class='leftCols'>";
 							echo $row['name'];
                             echo "</td><td>";
-                            echo "<select name='".$row['id']."'><option value='empty'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select>";
+                            echo "<select name=".$row['id']." class='question'><option value='empty'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select>";
                         }
                         else
                         {
 							echo "<tr><td class='leftCols' colspan='2'>";
 							echo "<span>".$row['name']."</span>";
-                            echo "<textarea name='".$row['id']."'></textarea>";
+                            echo "<textarea name=".$row['id']." class='textquestion'></textarea>";
                         }
 						echo "</td></tr>";
   					}

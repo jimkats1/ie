@@ -18,37 +18,49 @@ $pass=$_SESSION['pass'];
 	{
 		$qid = $row['id'];
 		$ans = $_POST[$qid];
+		if(!is_int($_POST['course']) && !is_int($_POST['prof']) && !is_int($_POST[$qid]))
+		{
+			$host  = $_SERVER['HTTP_HOST'];
+			$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+			$extra = 'res.php?error';
+			header("Location: http://$host$uri/$extra");
+		}
 		if($row['multiple_choice']==1)
 		{
 			switch ($ans)
 			{
 				case 1:
-					mysql_query("INSERT INTO result (cid,pid,qid,ans1) VALUES ('$cid','$pid','$qid',1)");
+					mysql_query("UPDATE result SET ans1=ans1+1 WHERE cid=$cid AND pid=$pid AND qid=$qid");
 					break;
 				case 2:
-					mysql_query("INSERT INTO result (cid,pid,qid,ans2) VALUES ('$cid','$pid','$qid',1)");
+					mysql_query("UPDATE result SET ans2=ans2+1 WHERE cid=$cid AND pid=$pid AND qid=$qid");
 					break;
 				case 3:
-					mysql_query("INSERT INTO result (cid,pid,qid,ans3) VALUES ('$cid','$pid','$qid',1)");
+					mysql_query("UPDATE result SET ans3=ans3+1 WHERE cid=$cid AND pid=$pid AND qid=$qid");
 					break;
 				case 4:
-					mysql_query("INSERT INTO result (cid,pid,qid,ans4) VALUES ('$cid','$pid','$qid',1)");
+					mysql_query("UPDATE result SET ans4=ans4+1 WHERE cid=$cid AND pid=$pid AND qid=$qid");
 					break;
 				case 5:
-					mysql_query("INSERT INTO result (cid,pid,qid,ans5) VALUES ('$cid','$pid','$qid',1)");
+					mysql_query("UPDATE result SET ans5=ans5+1 WHERE cid=$cid AND pid=$pid AND qid=$qid");
 					break;
 			}
 		}
 		else
 		{
-			mysql_query("INSERT INTO result (cid,pid,qid,textans) VALUES ('$cid','$pid','$qid','$ans')");
+			$ans = htmlentities($ans);
+			$ans = mysql_real_escape_string($ans);
+			$ans = trim($ans);
+			if($ans!="" || $ans!=null)
+			{
+				mysql_query("INSERT INTO textresult (cid,pid,qid,textans) VALUES ('$cid','$pid','$qid','$ans')");
+			}
 		}
 	}
-		echo $pid . "everything ok?";
-		/*$host  = $_SERVER['HTTP_HOST'];
+		$host  = $_SERVER['HTTP_HOST'];
 		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-		$extra = 'index.php';
-		header("Location: http://$host$uri/$extra");*/
+		$extra = 'res.php';
+		header("Location: http://$host$uri/$extra");
  }
  elseif($user==$adminuser && $pass==$adminpass)
  {

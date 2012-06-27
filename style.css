@@ -44,7 +44,7 @@ legend{
 	font-size: 1em;
 	text-align: center;
 	}
-.error{
+p.error{
 		color: red;
 		font-weight: bold;
 		font-size: 1em;
@@ -55,7 +55,7 @@ legend{
 	padding-bottom: 5px;
 	}
 table.pointmeter {
-	margin-top: 80px;
+	margin-top: 50px;
 	border-width: 1px;
 	border-spacing: 2px;
 	border-style: double;
@@ -145,3 +145,17 @@ a.delete:hover{
 		font-style: italic;
 		text-decoration: underline;
 		}
+h5{
+		color: red;
+		font-weight: bold;
+		font-size: 1em;
+		text-align: center;
+		margin: 0px;
+		padding: 0px;
+		margin-top: 25px;
+	}
+h3.error{
+	color: red;
+	font-weight: bold;
+	text-align: center;
+}

@@ -1,4 +1,3 @@
-// JavaScript main check
 function check()
 {
 	var username = document.getElementById('username').value;
@@ -29,4 +28,23 @@ function insertQCheck()
 		return false;
 	}
 	return true;
+}
+function semesterSelected()
+{
+	var semester = document.getElementById('semester').value;
+	document.getElementById('course').innerHTML="<option value='-1'></option>";
+	document.getElementById('prof').innerHTML="<option value='-1'></option>";
+	if(semester!=-1)
+	{
+		ajax(semester, 1);
+	}	
+}
+function courseSelected()
+{
+	var course = document.getElementById('course').value;
+	document.getElementById('prof').innerHTML="<option value='-1'></option>";
+	if(course!=-1)
+	{
+		ajax(course, 2);
+	}	
 }
