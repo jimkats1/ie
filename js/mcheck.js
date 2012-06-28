@@ -48,3 +48,9 @@ function courseSelected()
 		ajax(course, 2);
 	}	
 }
+function trim(value) 
+{
+  value = value.replace(/^\s+/,'');
+  value = value.replace(/\s+$/,'');
+  return value;
+}

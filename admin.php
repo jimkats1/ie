@@ -42,6 +42,30 @@
 					return true;
 				}
 			}
+			function semCheck()
+			{
+				var sem_num = document.getElementById("sem_num");
+				var sem_name = document.getElementById("sem_name");
+				sem_num.value = trim(sem_num.value);
+				sem_name.value = trim(sem_name.value);
+				if(sem_num.value == "" || sem_num.value == null || sem_name.value == "" || sem_num.value == null)
+				{
+					alert("Όλα τα πεδία είναι υποχρεωτικά!");
+					return false;
+				}
+			}
+			function courseCheck()
+			{
+				var name = document.getElementById("name");
+				var semester = document.getElementById("semester");
+				name.value = trim(name.value);
+				semester.value = trim(semester.value);
+				if(name.value == "" || name.value == null || semester.value == "" || semester.value == null)
+				{
+					alert("Όλα τα πεδία είναι υποχρεωτικά!");
+					return false;
+				}
+			}
 		</script>
 	</head>
 	<body>
@@ -73,22 +97,16 @@
 						{
 							$sql = "SELECT pid FROM course_professor WHERE cid='{$row['id']}'";
 							$prof = mysql_query($sql);
-							if($mc === 0)
-							{
+							
+							
 								while($row2 = mysql_fetch_assoc($prof))
 								{
-									$sql2 = "INSERT INTO result (cid,pid,qid) VALUES('{$row['id']}', '{$row2['pid']}', '{$maxId['MAX(id)']}')";
-									mysql_query($sql2);
+									if($mc == 1)
+									{
+										$sql2 = "INSERT INTO result (cid,pid,qid) VALUES('{$row['id']}', '{$row2['pid']}', '{$maxId['MAX(id)']}')";
+										mysql_query($sql2);
+									}
 								}
-							}
-							else
-							{
-								while($row2 = mysql_fetch_assoc($prof))
-								{
-									$sql2 = "INSERT INTO textresult (cid,pid,qid) VALUES('{$row['id']}', '{$row2['pid']}', '{$maxId['MAX(id)']}')";
-									mysql_query($sql2);
-								}
-							}
 						}
 					}
 			?>
@@ -124,10 +142,107 @@
 				?>
 			</table>
 			<?php
+				elseif(isset($_GET['q']) && $_GET['q'] == 2 && isset($_GET['course']) && $_GET['course'] == 1):
+				if(isset($_POST['submit']) && isset($_POST['sem_name']))
+				{
+					$sem_name = $_POST['sem_name'];
+					$sem_num = $_POST['sem_num'];
+					$sql = 'INSERT INTO semester (sem_num,sem_name) VALUES("'.$sem_num.'", "'.$sem_name.'")';
+				}
+			?>
+					<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
+					<a href="admin.php?q=2"><input type="button" id="submit" value="Καθηγητές"/></a>
+					
+					<form action="admin.php?q=2&course=1" method="post" onsubmit="return semCheck()">
+					<table class='pointmeter'>
+						<tr><th colspan='2'> Εισαγωγή Εξαμήνου </th></tr>
+						<tr><td> Εισαγωγή Αριθμού Εξαμήνου(πχ. 2 για 2ο εξάμηνο): </td><td><input type="text" name="sem_num" id="sem_num" /></td></tr>
+						<tr><td> Εισαγωγή Ονόματος Εξαμήνου(πχ. Β' Εξάμηνο): </td><td><input type="text" name="sem_name" id="sem_name"/></td></tr>
+						<tr><td colspan='2'><input type='submit' name='submit' value='Εισαγωγή'/></td></tr>
+					</table>
+					</form>
+			<?php
+				if(isset($_GET['del']))
+				{
+					$sql = "DELETE FROM semester WHERE id={$_GET['del']}";
+					mysql_query($sql);
+				}
+				$sql = "SELECT semester.id, semester.sem_num, semester.sem_name, COUNT(course.id) AS count FROM semester LEFT JOIN course ON semester.id=course.semester GROUP BY semester.id";
+				$result = mysql_query($sql);
+				echo "<table class='pointmeter'>";
+				echo "<tr><th> Id </th><th> Αριθμός Εξαμήνου </th><th> Όνομα Εξαμήνου </th><th> Αριθμός Μαθημάτων </th><th><br/></th></tr>";
+				while($row = mysql_fetch_assoc($result))
+				{
+					echo "<tr>";
+					echo "<td>".$row['id']."</td>";
+					echo "<td>".$row['sem_num']."</td>";
+					echo "<td>".$row['sem_name']."</td>";
+					echo "<td>".$row['count']."</td>";
+					echo "<td><a class='delete' href='admin.php?q=2&course=1&del={$row['id']}'>Διαγραφή</a></td>";
+					echo "</tr>";
+				}
+				echo "</table>";
+				echo "<hr/>";
+				if(isset($_POST['submit']) && isset($_POST['name']))
+				{
+					$name = $_POST['name'];
+					$semester = $_POST['semester'];
+					$sql = 'INSERT INTO course (name,semester) VALUES("'.$name.'", "'.$semester.'")';
+					mysql_query($sql);
+				}
+			?>
+			<form action="admin.php?q=2&course=1" method="post">
+					<table class='pointmeter'>
+						<tr><th colspan='2'> Εισαγωγή Μαθήματος </th></tr>
+						<tr><td> Εισαγωγή Μαθήματος(Όνομα): </td><td><input type="text" name="name" id="name" /></td></tr>
+						<tr><td> Εισαγωγή Εξαμήνου του Μαθήματος(Αριθμό): </td><td><input type="text" name="semester" id="semester"/></td></tr>
+						<tr><td colspan='2'><input type='submit' name='submit' value='Εισαγωγή'/></td></tr>
+					</table>
+					</form>
+			<?php
+				$sql = "SELECT course.id, course.name, course.semester, COUNT(course_professor.id) AS count FROM course LEFT JOIN course_professor ON course.id=course_professor.cid GROUP BY course.id";
+				$result = mysql_query($sql);
+				$sql = "SELECT * FROM professor";
+				echo "<table class='pointmeter'>";
+				echo "<tr><th> Id </th><th> Μάθημα </th><th> Εξάμηνο </th><th> Καθηγητές </th><th> Προσθήκη Καθηγητή στο Μάθημα </th></tr>";
+				while($row = mysql_fetch_assoc($result))
+				{
+					echo "<tr>";
+					echo "<td>".$row['id']."</td>";
+					echo "<td>".$row['name']."</td>";
+					echo "<td>".$row['semester']."</td>";
+					echo "<td><a href='admin.php?q=2&course=1&courseId={$row['id']}'>".$row['count']."</a></td>";
+					echo "<td><select onchange='insProf(this, ".$row['id'].")'>";
+					echo "<option selected='selected' value='0'>Επέλεξε Καθηγητή</option>";
+					$profResult = mysql_query($sql);
+					while($row2 = mysql_fetch_assoc($profResult))
+					{
+						echo "<option value='".$row2['id']."'>".$row2['name']." ".$row2['surname']."</option>";
+					}
+					echo "</select></td>";
+					echo "</tr>";
+				}
+				echo "</table>";
+			?>
+			<?php
 				elseif(isset($_GET['q']) && $_GET['q'] == 2):
+				if(isset($_GET['delete']) && isset($_GET['prof']))
+				{
+					$sql = "DELETE FROM professor WHERE id={$_GET['delete']}";
+					mysql_query($sql);
+					$sql = "DELETE result, textresult FROM result INNER JOIN textresult ON question.id=textresult.qid WHERE result.pid='{$_GET['delete']}' AND textresult.pid='{$_GET['delete']}'";
+					mysql_query($sql);
+				}
 				if(isset($_GET['course']) && $_GET['course'] == 2)
 				{
-					$sql = "SELECT professor.id AS id, course_professor.id AS courseProf, professor.name, professor.surname, course.name AS course, sem_name FROM (course INNER JOIN semester ON course.semester=semester.id) INNER JOIN (course_professor INNER JOIN professor ON course_professor.pid=professor.id) ON course.id=course_professor.cid WHERE professor.id={$_GET['profId']}";
+					if(isset($_GET['courseProf']))
+					{
+						$sql = "DELETE FROM course_professor WHERE id={$_GET['courseProf']}";
+						mysql_query($sql);
+						$sql = "DELETE FROM result, textresult WHERE cid={$_GET['courseId']}";
+						mysql_query($sql);
+					}
+					$sql = "SELECT professor.id AS id, course_professor.id AS courseProf, professor.name, professor.surname, course.name AS course, sem_name, course.id AS cid FROM (course INNER JOIN semester ON course.semester=semester.id) INNER JOIN (course_professor INNER JOIN professor ON course_professor.pid=professor.id) ON course.id=course_professor.cid WHERE professor.id={$_GET['profId']}";
 					$result = mysql_query($sql);
 					echo "<table class='pointmeter'>";
 					echo "<tr><th> Όνομα </th><th> Επώνυμο </th><th> Μάθημα </th><th> Εξάμηνο </th><th><br/></th></tr>";
@@ -138,13 +253,15 @@
 						echo "<td>".$row['surname']."</td>";
 						echo "<td>".$row['course']."</td>";
 						echo "<td>".$row['sem_name']."</td>";
-						echo "<td><a class='delete' href='admin.php?q=2&course=2&profId={$row['id']}&courseProf={$row['courseProf']}'>Αφαίρεση Μαθήματος από Καθηγητή</a></td></tr>";
+						echo "<td><a class='delete' href='admin.php?q=2&course=2&profId={$row['id']}&courseProf={$row['courseProf']}&courseId={$row['cid']}'>Αφαίρεση Μαθήματος από Καθηγητή</a></td></tr>";
 						echo "</tr>";
 					}
 					echo "</table>";
 				}
 			?>
 				<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
+				<a href="admin.php?q=2&course=1"><input type="button" id="submit" value="Μαθήματα"/></a>
+				<h5>Προσοχή: Αφαίρεση μαθήματος από καθηγητή ή διαγραφή καθηγητή θα διαγράψει τα αποτελέσματα τους.</h5>
 				<form action="admin.php?q=2" method="post">
 				<table class="pointmeter">
 					<tr>
@@ -179,7 +296,7 @@
 							echo "<td>".$row['name']."</td>";
 							echo "<td>".$row['surname']."</td>";
 							echo "<td><a class='delete' href='admin.php?q=2&course=2&profId={$row['id']}'>".$row['COUNT(cid)']."</a></td>";
-							echo "<td><a class='delete' href='admin.php?q=2&delete={$row['id']}'>Διαγραφή</a></td></tr>";
+							echo "<td><a class='delete' href='admin.php?q=2&prof=1&delete={$row['id']}'>Διαγραφή</a></td></tr>";
 							echo "</tr>";
 						}
 						echo "</table>";
