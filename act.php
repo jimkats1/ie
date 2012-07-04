@@ -48,7 +48,6 @@ $pass=$_SESSION['pass'];
 		}
 		else
 		{
-			$ans = htmlentities($ans);
 			$ans = mysql_real_escape_string($ans);
 			$ans = trim($ans);
 			if($ans!="" || $ans!=null)

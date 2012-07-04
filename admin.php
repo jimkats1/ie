@@ -53,6 +53,10 @@
 					alert("Όλα τα πεδία είναι υποχρεωτικά!");
 					return false;
 				}
+				else
+				{
+					return true;
+				}
 			}
 			function courseCheck()
 			{
@@ -148,6 +152,24 @@
 					$sem_name = $_POST['sem_name'];
 					$sem_num = $_POST['sem_num'];
 					$sql = 'INSERT INTO semester (sem_num,sem_name) VALUES("'.$sem_num.'", "'.$sem_name.'")';
+					mysql_query($sql);
+				}
+				elseif(isset($_GET['courseId']))
+				{
+					$sql = "SELECT professor.id, professor.name, professor.surname, course.name AS course FROM (course INNER JOIN course_professor ON course.id=course_professor.cid) INNER JOIN professor ON course_professor.pid=professor.id WHERE course.id={$_GET['courseId']}";
+					$result = mysql_query($sql);
+					echo "<table class='pointmeter'>";
+					echo "<tr><th> Id </th><th> Όνομα Καθηγητή </th><th> Επώνυμο Καθηγητή </th><th> Μάθημα </th></tr>";
+					while($row = mysql_fetch_assoc($result))
+					{
+						echo "<tr>";
+						echo "<td>".$row['id']."</td>";
+						echo "<td>".$row['name']."</td>";
+						echo "<td>".$row['surname']."</td>";
+						echo "<td>".$row['course']."</td>";
+						echo "</tr>";
+					}
+					echo "</table>";
 				}
 			?>
 					<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
@@ -195,7 +217,7 @@
 					<table class='pointmeter'>
 						<tr><th colspan='2'> Εισαγωγή Μαθήματος </th></tr>
 						<tr><td> Εισαγωγή Μαθήματος(Όνομα): </td><td><input type="text" name="name" id="name" /></td></tr>
-						<tr><td> Εισαγωγή Εξαμήνου του Μαθήματος(Αριθμό): </td><td><input type="text" name="semester" id="semester"/></td></tr>
+						<tr><td> Εισαγωγή Id Εξαμήνου για το Μαθήμα(To Id από τον παραπάνω πίνακα): </td><td><input type="text" name="semester" id="semester"/></td></tr>
 						<tr><td colspan='2'><input type='submit' name='submit' value='Εισαγωγή'/></td></tr>
 					</table>
 					</form>
@@ -367,19 +389,28 @@
 						while($row = mysql_fetch_array($result))
 						{
 							$all = $row['ans1'] + $row['ans2'] + $row['ans3'] + $row['ans4'] + $row['ans5'];
-							$perc['ans1'] = ($row['ans1']/$all)*100;
-							$perc['ans2'] = ($row['ans2']/$all)*100;
-							$perc['ans3'] = ($row['ans3']/$all)*100;
-							$perc['ans4'] = ($row['ans4']/$all)*100;
-							$perc['ans5'] = ($row['ans5']/$all)*100;
-							echo "<tr>";
-							echo "<td>".$row['name']."</td>";
-							echo "<td>".$perc['ans1']."&#37; (".$row['ans1'].")</td>";
-							echo "<td>".$perc['ans2']."&#37; (".$row['ans2'].")</td>";
-							echo "<td>".$perc['ans3']."&#37; (".$row['ans3'].")</td>";
-							echo "<td>".$perc['ans4']."&#37; (".$row['ans4'].")</td>";
-							echo "<td>".$perc['ans5']."&#37; (".$row['ans5'].")</td>";
-							echo "</tr>";
+							if($all == 0)
+							{
+								echo "<tr><th colspan='6'>Δεν υπάρχουν αποτελέσματα!</th></tr>";
+								echo "</table>";
+								break;
+							}
+							else
+							{
+								$perc['ans1'] = ($row['ans1']/$all)*100;
+								$perc['ans2'] = ($row['ans2']/$all)*100;
+								$perc['ans3'] = ($row['ans3']/$all)*100;
+								$perc['ans4'] = ($row['ans4']/$all)*100;
+								$perc['ans5'] = ($row['ans5']/$all)*100;
+								echo "<tr>";
+								echo "<td>".$row['name']."</td>";
+								echo "<td>".$perc['ans1']."&#37; (".$row['ans1'].")</td>";
+								echo "<td>".$perc['ans2']."&#37; (".$row['ans2'].")</td>";
+								echo "<td>".$perc['ans3']."&#37; (".$row['ans3'].")</td>";
+								echo "<td>".$perc['ans4']."&#37; (".$row['ans4'].")</td>";
+								echo "<td>".$perc['ans5']."&#37; (".$row['ans5'].")</td>";
+								echo "</tr>";
+							}
 						}
 						echo "</table>";	
 					}

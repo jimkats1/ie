@@ -1,4 +1,14 @@
 <?php
+session_start();
+require_once(".inc/config.php");
+if(!isset($_SESSION['username']))
+	{
+		die("ERROR: INVALID SESSION!");
+	}
+	elseif($_SESSION['username']!=$adminuser || $_SESSION['pass']!=$adminpass)
+	{
+		die("ERROR: YOU MUST BE ADMIN ACCOUNT!");
+	}
 if(isset($_POST['profId']) && isset($_POST['courseId']))
 {
 	require_once(".inc/init.php");

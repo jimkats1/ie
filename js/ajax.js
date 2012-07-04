@@ -38,8 +38,6 @@ xmlhttp.send();
 function insProf(element, course)
 {
 	var xmlhttp;
-	alert(element.value);
-	alert(course);
 	if(element.value == 0)
 	{
 		return false;
