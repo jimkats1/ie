@@ -46,7 +46,6 @@ if($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
   						</tr>
   					</table>
   					<input type="submit" value="Είσοδος" id="submit" />
-
   				</form> 
   			</fieldset>
   		</div>

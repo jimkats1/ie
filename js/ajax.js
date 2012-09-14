@@ -32,8 +32,8 @@ function ajax(ch1, ch2)
     			document.getElementById(""+param).innerHTML=xmlhttp.responseText;
     		}
   	}
-xmlhttp.open("GET",getter+".php?q="+ch1,true);
-xmlhttp.send();
+	xmlhttp.open("GET",getter+".php?q="+ch1,true);
+	xmlhttp.send();
 }
 function insProf(element, course)
 {
@@ -43,21 +43,21 @@ function insProf(element, course)
 		return false;
 	}
 	if (window.XMLHttpRequest)
-  	{
-  		xmlhttp=new XMLHttpRequest();
-  	}
+	{
+		xmlhttp=new XMLHttpRequest();
+	}
 	else
-  	{// code for IE6, IE5
-  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  	}
+	{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
 	xmlhttp.onreadystatechange=function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    		{
-    			alert(""+xmlhttp.responseText);
-    		}
-  	}
-xmlhttp.open("POST","profregister.php",true);
-xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-xmlhttp.send("profId="+element.value+"&courseId="+course);
+		{
+			alert(""+xmlhttp.responseText);
+		}
+	}
+	xmlhttp.open("POST","profregister.php",true);
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xmlhttp.send("profId="+element.value+"&courseId="+course);
 }

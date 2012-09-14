@@ -8,8 +8,8 @@ if(empty($_SESSION['username']))
 require_once(".inc/config.php");
 $user=$_SESSION['username'];
 $pass=$_SESSION['pass'];
- if($_SESSION['qform']===5)
- {
+if($_SESSION['qform']===5)
+{
 	require_once(".inc/init.php");
 	$cid = $_POST['course'];
 	$pid = $_POST['prof'];
@@ -56,10 +56,10 @@ $pass=$_SESSION['pass'];
 			}
 		}
 	}
-		$host  = $_SERVER['HTTP_HOST'];
-		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-		$extra = 'res.php';
-		header("Location: http://$host$uri/$extra");
+	$host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	$extra = 'res.php';
+	header("Location: http://$host$uri/$extra");
  }
  elseif($user==$adminuser && $pass==$adminpass)
  {
@@ -74,7 +74,6 @@ elseif(isset($_SESSION['username']))
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 	$extra = 'questionnaire.php';
 	header("Location: http://$host$uri/$extra");
-
 }
 else
 {
@@ -82,5 +81,4 @@ else
     $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
     header("Location: http://$host$uri/");
 }
-
 ?>

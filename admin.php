@@ -101,16 +101,14 @@
 						{
 							$sql = "SELECT pid FROM course_professor WHERE cid='{$row['id']}'";
 							$prof = mysql_query($sql);
-							
-							
-								while($row2 = mysql_fetch_assoc($prof))
+							while($row2 = mysql_fetch_assoc($prof))
+							{
+								if($mc == 1)
 								{
-									if($mc == 1)
-									{
 										$sql2 = "INSERT INTO result (cid,pid,qid) VALUES('{$row['id']}', '{$row2['pid']}', '{$maxId['MAX(id)']}')";
 										mysql_query($sql2);
-									}
 								}
+							}
 						}
 					}
 			?>
@@ -174,7 +172,6 @@
 			?>
 					<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
 					<a href="admin.php?q=2"><input type="button" id="submit" value="Καθηγητές"/></a>
-					
 					<form action="admin.php?q=2&course=1" method="post" onsubmit="return semCheck()">
 					<table class='pointmeter'>
 						<tr><th colspan='2'> Εισαγωγή Εξαμήνου </th></tr>
