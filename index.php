@@ -24,7 +24,7 @@ if($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<title>ΕΣΩΤΕΡΙΚΗ ΑΞΙΟΛΟΓΗΣΗ ΤΕΣΥΔ</title>
-        <script type="text/javascript" src="js/mcheck.js"></script>
+		<script type="text/javascript" src="js/mcheck.js"></script>
 		<script type="text/javascript" src="js/questionnaire.js"></script>
 		<script type="text/javascript" src="js/footer.js"></script>
 	</head>
@@ -33,7 +33,7 @@ if($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
   			<h1>ΕΣΩΤΕΡΙΚΗ ΑΞΙΟΛΟΓΗΣΗ ΤΕΣΥΔ</h1>
   		</div>
   		<div id="main">
-  			<fieldset><legend>Είσοδος</legend>
+  			<fieldset><legend>Σύνδεση</legend>
   				<form action="act.php" name="login" method="post" onsubmit="return check();">
   					<table>
 						<tr>
@@ -49,22 +49,24 @@ if($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
   				</form> 
   			</fieldset>
   		</div>
+  		<p class="error" id="error">Συμπληρώστε τα δυο παραπάνω πεδία για είσοδο!</p>
   		<?php
-			$sql = "SELECT * FROM config WHERE id='1'";
-			$result = mysql_query($sql);
-			$row = mysql_fetch_assoc($result);
-			if(isset($_GET['period']))
-			{
-				echo "<script type='text/javascript'>alert('ΔΕΝ ΕΙΝΑΙ ΠΕΡΙΟΔΟΣ ΑΞΙΟΛΟΓΗΣΗΣ!')</script>";
-			}
-		?>
-        <p class='error'>Συμπληρώστε τα δυο παραπάνω πεδία για είσοδο!</p>
-        <p class='warning'><?php echo $row['warning_message']; ?></p>
-        <p class='intro'><?php echo $row['intro_message']; ?></p>
+  			$sql = "SELECT * FROM config WHERE id='1'";
+  			$result = mysql_query($sql);
+  			$row = mysql_fetch_assoc($result);
+  		?>
+		<p class="warning"><?php echo $row['warning_message']; ?></p>
+		<p class="intro"><?php echo $row['intro_message']; ?></p>
   		<div id="footer">
 			<script type="text/javascript">
 				footer();
 			</script>
   		</div>
+  		<?php
+			if(isset($_GET['period']))
+			{
+				echo "<script type='text/javascript'>alert('ΔΕΝ ΕΙΝΑΙ ΠΕΡΙΟΔΟΣ ΑΞΙΟΛΟΓΗΣΗΣ!')</script>";
+			}
+		?>
 	</body>
 </html>

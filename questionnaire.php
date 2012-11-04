@@ -8,20 +8,23 @@
 	{
 		session_destroy();
 		$host  = $_SERVER['HTTP_HOST'];
-       	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-       	$extra = 'index.php?period=out';
-       	if($row['evaluation_period'] == 0) {header("Location: http://$host$uri/$extra");}
-       	else
-       	{
+		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+		$extra = 'index.php?period=out';
+		if($row['evaluation_period'] == 0) 
+		{
+			header("Location: http://$host$uri/$extra");
+		}
+		else
+		{
 			header("Location: http://$host$uri/");
 		}
 	}
 	elseif($_SESSION['username']==$adminuser && $_SESSION['pass']==$adminpass)
 	{
 		$host  = $_SERVER['HTTP_HOST'];
-       	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-       	$extra = 'admin.php';
-       	header("Location: http://$host$uri/$extra");
+		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+		$extra = 'admin.php';
+		header("Location: http://$host$uri/$extra");
 	}
 	$_SESSION['qform']=5;
 	$_SESSION['qresult']=0;
