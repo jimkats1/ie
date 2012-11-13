@@ -115,7 +115,7 @@
 			<a href="admin.php"><input type="button" id="submit" value="&lt Επιστροφή" /></a>
 			<form action="admin.php?q=1" method="post" onsubmit="return insertQCheck()">
 				<table class="pointmeter">
-					<tr><td>Εισαγωγή Ερώτησης: <input type="text" name="new_q" id="new_q" /></td><td>Πολλαπλής Επιλογής: Ναι<input type="radio" name="multiple_choice" id="multiple_choice" checked="checked" value="1"/> Όχι<input type="radio" name="multiple_choice" id="mulptiple_choice" value="0"/></td><td><input type="submit" name="submit" value="Εισαγωγή" /></td></tr>
+					<tr><td>Εισαγωγή Ερώτησης: <input type="text" name="new_q" id="new_q" /></td><td id="wrap_fix">Πολλαπλής Επιλογής: Ναι<input type="radio" name="multiple_choice" id="multiple_choice" checked="checked" value="1"/> Όχι<input type="radio" name="multiple_choice" id="mulptiple_choice" value="0"/></td><td><input type="submit" name="submit" value="Εισαγωγή" /></td></tr>
 				</table>
 			</form>	
 			<table class="questionnaire">
