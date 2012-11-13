@@ -1,11 +1,11 @@
 function formCheck()
 {
-	var returner = qCheck();
+	var returner = SCP();
 	if(returner == false)
 	{
 		return false;
 	}
-	var returner = SCP();
+	var returner = qCheck();
 	return returner;
 }
 function qCheck()
@@ -14,22 +14,15 @@ function qCheck()
 	var textQuestions = document.getElementsByClassName("textquestion");
 	for(var i=0;i<questions.length;i++)
 	{
-		if(isInt(questions[i].value))
-		{
-			if(questions[i].value < 1)
-			{
-				alert("Συμπληρώστε όλα τα πεδία!");
-				return false;
-			}
-		}
-		else
-		{
-			return false;
+		if(questions[i].value === "empty" || !isInt(questions[i].value))
+		{	
+			alert("Συμπληρώστε όλα τα πεδία!");
+			return false;			
 		}
 	}
 	for(var i=0;i<textQuestions.length;i++)
 	{
-		if(textQuestions[i] == null || textQuestions[i] == "")
+		if(textQuestions[i].value == null || textQuestions[i].value == "")
 		{
 			alert("Συπληρώστε όλα τα πεδία!");
 			return false;
@@ -62,7 +55,7 @@ function SCP()
 }
 function isInt(x) 
 {
-  var y=parseInt(x);
-  if (isNaN(y)) return false;
-  return true;
+	var y=parseInt(x);
+	if (isNaN(y)) return false;
+	return true;
 }
