@@ -154,7 +154,7 @@ h5{
 		padding: 0px;
 		margin-top: 25px;
 	}
-h3.error{
+.error{
 	color: red;
 	font-weight: bold;
 	text-align: center;

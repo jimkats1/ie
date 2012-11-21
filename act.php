@@ -6,6 +6,7 @@ if(empty($_SESSION['username']))
 	$_SESSION['pass']=$_POST['pass'];
 }
 require_once(".inc/config.php");
+require_once(".inc/ldap.php");
 $user=$_SESSION['username'];
 $pass=$_SESSION['pass'];
 if($_SESSION['qform']===5)
@@ -68,7 +69,7 @@ if($_SESSION['qform']===5)
 	$extra = 'admin.php';
 	header("Location: http://$host$uri/$extra");
  }
-elseif(isset($_SESSION['username']))
+elseif(ldapAuth($user,$pass))
 {
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
@@ -76,9 +77,10 @@ elseif(isset($_SESSION['username']))
 	header("Location: http://$host$uri/$extra");
 }
 else
-{
+{	
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-	header("Location: http://$host$uri/");
+	$extra = 'res.php?error=1';
+	header("Location: http://$host$uri/$extra");
 }
 ?>
