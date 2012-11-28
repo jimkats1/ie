@@ -23,12 +23,23 @@
   	</div>
   	<div id="main">
 		<?php
-			$error = $_SESSION['ldapError'];
-			if(isset($_GET['error']))
+			$_SESSION['qform']=0;
+			if(isset($_SESSION['ldapError']))
 			{
+				$error = $_SESSION['ldapError'];
 				echo "<h3 class='error'>Υπήρξε σφάλμα παρακαλώ επικοινωνήστε με τον Διαχειριστή: ". $adminmail ."</h3>\n";
 				echo "<h4 class='error'>Τύπος σφάλματος: $error</h4>\n";
 				echo "<a href='logout.php'><input type='button' id='submit' value='Επιστροφή' /></a>\n";
+				$_SESSION['ldapError']=null;
+			}
+			elseif(isset($_SESSION['evalError']))
+			{
+				$error = $_SESSION['evalError'];
+				echo "<h3 class='error'>$error</h3>\n";
+				echo "<h4 class='error'>Αν θεωρείτε ότι είναι σφάλμα επικοινωνήστε με τον Διαχειριστή: ". $adminmail ."</h4>\n";
+				echo "<a href='logout.php'><input type='button' id='submit' value='Έξοδος' /></a>\n";
+				echo "<a href='questionnaire.php'><input type='button' id='submit' value='Επιστροφή για αξιολόγηση άλλου μαθήματος' /></a>\n";
+				$_SESSION['evalError']=null;
 			}
 			else
 			{

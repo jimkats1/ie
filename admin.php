@@ -219,7 +219,7 @@
 					</table>
 					</form>
 			<?php
-				$sql = "SELECT course.id, course.name, course.semester, COUNT(course_professor.id) AS count FROM course LEFT JOIN course_professor ON course.id=course_professor.cid GROUP BY course.id";
+				$sql = "SELECT course.id, course.name, semester.sem_num, COUNT(course_professor.id) AS count FROM course LEFT JOIN course_professor ON course.id=course_professor.cid INNER JOIN semester ON semester.id=course.semester GROUP BY course.id";
 				$result = mysql_query($sql);
 				$sql = "SELECT * FROM professor";
 				echo "<table class='pointmeter'>";
@@ -229,7 +229,7 @@
 					echo "<tr>";
 					echo "<td>".$row['id']."</td>";
 					echo "<td>".$row['name']."</td>";
-					echo "<td>".$row['semester']."</td>";
+					echo "<td>".$row['sem_num']."</td>";
 					echo "<td><a href='admin.php?q=2&course=1&courseId={$row['id']}'>".$row['count']."</a></td>";
 					echo "<td><select onchange='insProf(this, ".$row['id'].")'>";
 					echo "<option selected='selected' value='0'>Επέλεξε Καθηγητή</option>";
@@ -333,11 +333,11 @@
 						<select name="semester" id="semester" onchange="semesterSelected()">
 							<option value='-1'></option>
 							<?php
-								$result = mysql_query("SELECT * FROM semester");
-								while($row = mysql_fetch_array($result))
-								{
-									echo "<option value='".$row['sem_num']."'>{$row['sem_name']}</option>";
-								}	
+									$result = mysql_query("SELECT * FROM semester");
+									while($row = mysql_fetch_array($result))
+									{
+										echo "<option value='".$row['id']."'>{$row['sem_name']}</option>";	
+									}	
 							?>
 						</select>
 					</td>
@@ -345,7 +345,7 @@
 				<tr>
 					<td> Επέλεξε Μάθημα: </td>
 					<td>
-						<select name="course" id="course" onchange="courseSelected()">
+						<select name="course" id="course" onchange="courseSelected();">
 							<option value='-1'></option>
 						</select>
 					</td>
@@ -358,10 +358,12 @@
 				</tr>
 				<tr>
 					<td colspan='2'>Εμφάνιση ερωτήσεων πολλαπλής επιλογής: </td>
-					<td colspan='2'> Ναι<input type="radio" name="multiple_choice" id="multiple_choice" checked="checked" value="1"/> Όχι<input type="radio" name="multiple_choice" id="mulptiple_choice" value="0"/></td>
+					<td colspan='2'> 
+					 	Ναι<input type='radio' name='multiple_choice' id='multiple_choice' checked='checked' value='1'/> Όχι<input type='radio' name='multiple_choice' id='mulptiple_choice' value='0'/>
+					 </td>
 				</tr>
 				<tr>
-					<td colspan='4'><input type="submit" name="submit" value="Εμφάνιση"</td>
+					<td colspan='4'><input type="submit" name="submit" value="Εμφάνιση"/></td>
 				</tr>
 			</table>
 			</form>
@@ -372,11 +374,17 @@
 					mysql_query($sql);
 					$sql = "TRUNCATE TABLE textresult";
 					mysql_query($sql);
+					$sql = "TRUNCATE TABLE student";
+					mysql_query($sql);
 				}
 			?>
 			<?php
 				if(isset($_POST['submit']))
 				{
+					$sql = "SELECT semester.sem_name, course.name AS course, professor.name, professor.surname FROM semester INNER JOIN (course INNER JOIN course_professor ON course.id=course_professor.cid) ON semester.id=course.semester INNER JOIN professor ON course_professor.cid=professor.id WHERE semester.id={$_POST['semester']} AND course.id={$_POST['course']} AND professor.id={$_POST['prof']}";
+						$result = mysql_query($sql);
+						$row = mysql_fetch_array($result);
+						echo "<table class='pointmeter'><tr><td>{$row['sem_name']}</td><td>{$row['course']}</td><td>{$row['name']} {$row['surname']}</td></tr></table>";
 					if($_POST['multiple_choice']==1)
 					{
 						$sql = "SELECT name, ans1, ans2, ans3, ans4, ans5 FROM question INNER JOIN result ON question.id=result.qid WHERE cid={$_POST['course']} AND pid={$_POST['prof']}";

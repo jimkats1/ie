@@ -14,18 +14,38 @@ if($_SESSION['qform']===5)
 	require_once(".inc/init.php");
 	$cid = $_POST['course'];
 	$pid = $_POST['prof'];
+	$username = sha1($user);
+	$username = mysql_real_escape_string($username);
+	$cid = mysql_real_escape_string($cid);
+	$pid = mysql_real_escape_string($pid);
+	$query = mysql_query("SELECT username, cid FROM student WHERE username='$username' AND cid=$cid");
+	$numrows = mysql_num_rows($query);
+	$cid = intval($cid);
+	$pid = intval($pid);
+	if($numrows!=0)
+	{
+		$_SESSION['evalError']="Έχετε αξιολογήσει ήδη το συγκεκριμένο μάθημα!";
+		$host  = $_SERVER['HTTP_HOST'];
+		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+		$extra = 'res.php';
+		header("Location: http://$host$uri/$extra");
+		die();
+	}
+	elseif(!is_int($cid) && !is_int($pid))
+	{
+		$_SESSION['evalError'] = "Γενικό Σφάλμα!";
+		$host  = $_SERVER['HTTP_HOST'];
+		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+		$extra = 'res.php';
+		header("Location: http://$host$uri/$extra");
+		die();	
+	}
 	$query = mysql_query("SELECT * FROM question");
 	while($row = mysql_fetch_array($query))
 	{
 		$qid = $row['id'];
 		$ans = $_POST[$qid];
-		if(!is_int($_POST['course']) && !is_int($_POST['prof']) && !is_int($_POST[$qid]))
-		{
-			$host  = $_SERVER['HTTP_HOST'];
-			$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-			$extra = 'res.php?error';
-			header("Location: http://$host$uri/$extra");
-		}
+		$ans = mysql_real_escape_string($ans);
 		if($row['multiple_choice']==1)
 		{
 			switch ($ans)
@@ -49,7 +69,6 @@ if($_SESSION['qform']===5)
 		}
 		else
 		{
-			$ans = mysql_real_escape_string($ans);
 			$ans = trim($ans);
 			if($ans!="" || $ans!=null)
 			{
@@ -57,6 +76,8 @@ if($_SESSION['qform']===5)
 			}
 		}
 	}
+	mysql_query("INSERT INTO student (username,cid) VALUES('$username','$cid')");
+	$_SESSION['qform']=0;
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 	$extra = 'res.php';
@@ -77,10 +98,11 @@ elseif(ldapAuth($user,$pass))
 	header("Location: http://$host$uri/$extra");
 }
 else
-{	
+{
+	$_SESSION['evalError'] = "Γενικό Σφάλμα2!";	
 	$host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-	$extra = 'res.php?error=1';
+	$extra = 'res.php';
 	header("Location: http://$host$uri/$extra");
 }
 ?>

@@ -58,7 +58,7 @@
 								$result = mysql_query("SELECT * FROM semester");
 								while($row = mysql_fetch_array($result))
 								{
-									echo "<option value='".$row['sem_num']."'>{$row['sem_name']}</option>";
+									echo "<option value='".$row['id']."'>{$row['sem_name']}</option>";
 								}	
 							?>
 						</select>
