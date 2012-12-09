@@ -16,15 +16,22 @@ if(isset($_POST['profId']) && isset($_POST['courseId']))
 	$courseId = $_POST['courseId'];
 	$profId = intval($profId);
 	$courseId = intval($courseId);
+	$sql = "SELECT * FROM course_professor WHERE cid=$courseId AND pid=$profId";
+	$result = mysql_query($sql);
+	$result = mysql_num_rows($result);
+	if($result!=0)
+	{
+		die("1Το συγκεκριμένο μάθημα περιέχει ήδη τον καθηγητή που επιλέξατε!");
+	}
 	$sql = "INSERT INTO course_professor (cid, pid) VALUES ($courseId, $profId)";
 	if(!mysql_query($sql))
 	{
-		die("DATABASE ERROR!");
+		die("1ERROR: DATABASE ERROR!");
 	}
 	$sql = "SELECT id, multiple_choice FROM question";
 	if(!($result = mysql_query($sql)))
 	{
-		die("DATABASE ERROR!2");
+		die("1ERROR: DATABASE ERROR!2");
 	}
 	while($row = mysql_fetch_assoc($result))
 	{
@@ -34,10 +41,10 @@ if(isset($_POST['profId']) && isset($_POST['courseId']))
 			mysql_query($sql);
 		}
 	}
-	echo "Ο Καθηγητής εισάχθηκε με επιτυχία!";
+	echo "Ο καθηγητής εισάχθηκε με επιτυχία!";
 }
 else
 {
-	die("Error 3!");
+	die("1Error: Post arguments are not set!");
 }
 ?>

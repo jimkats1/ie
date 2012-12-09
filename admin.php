@@ -230,7 +230,7 @@
 					echo "<td>".$row['id']."</td>";
 					echo "<td>".$row['name']."</td>";
 					echo "<td>".$row['sem_num']."</td>";
-					echo "<td><a href='admin.php?q=2&course=1&courseId={$row['id']}'>".$row['count']."</a></td>";
+					echo "<td><a id='{$row['id']}' href='admin.php?q=2&course=1&courseId={$row['id']}'>".$row['count']."</a></td>";
 					echo "<td><select onchange='insProf(this, ".$row['id'].")'>";
 					echo "<option selected='selected' value='0'>Επέλεξε Καθηγητή</option>";
 					$profResult = mysql_query($sql);
@@ -241,7 +241,7 @@
 					echo "</select></td>";
 					echo "</tr>";
 				}
-				echo "</table>";
+				echo "</table></form>";
 			?>
 			<?php
 				elseif(isset($_GET['q']) && $_GET['q'] == 2):

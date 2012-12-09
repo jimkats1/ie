@@ -54,7 +54,22 @@ function insProf(element, course)
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-			alert(""+xmlhttp.responseText);
+			response = xmlhttp.responseText;
+			response = trim(response);
+			str = response.substr(0,1);
+			alert(str);
+			if(str == '1')
+			{
+				alert(response.substr(1,response.length));
+			}
+			else
+			{
+				numProf = document.getElementById(course).innerHTML;
+				numProf = parseInt(numProf);
+				numProf++;
+				document.getElementById(course).innerHTML = numProf;
+				alert(response);
+			}
 		}
 	}
 	xmlhttp.open("POST","profregister.php",true);

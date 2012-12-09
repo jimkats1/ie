@@ -39,7 +39,7 @@ legend{
 	margin-right: auto;
 	}
 .warning{
-	color: blue;
+	color: #F55540;
 	font-style: italic; 
 	font-size: 1em;
 	text-align: center;
@@ -158,4 +158,13 @@ h5{
 	color: red;
 	font-weight: bold;
 	text-align: center;
+}
+a.link {
+	color: blue;
+}
+a.link:hover{
+	text-decoration: underline;
+}
+p.copyright {
+	font-size: 0.8em;
 }
