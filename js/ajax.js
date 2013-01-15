@@ -57,7 +57,6 @@ function insProf(element, course)
 			response = xmlhttp.responseText;
 			response = trim(response);
 			str = response.substr(0,1);
-			alert(str);
 			if(str == '1')
 			{
 				alert(response.substr(1,response.length));
